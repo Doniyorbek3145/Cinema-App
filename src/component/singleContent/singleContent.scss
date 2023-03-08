@@ -1,0 +1,59 @@
+
+
+.media{
+    display: flex;
+    flex-direction: column;
+    width: 23%;
+    padding: 5px;
+    margin: 10px 0;
+    background-color: #282c34;
+    border-radius: 10px;
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+}
+
+.media:hover{
+    transition: 0.75s;
+    background-color: white;
+    color: black;
+
+    .aboutMovie{
+        font-weight: 1000;
+        color: black;
+    }
+}
+
+@media (max-width: 550px) {
+    .media{
+        width: 98%;
+
+    }
+}
+
+.poster{
+    border-radius: 10px;
+    height: 450px;
+}
+
+.title{
+    width: 100%;
+    text-align: center;
+    font-size: 17px;
+    padding: 8px 0;
+}
+
+.subTitleBox{
+    padding-bottom: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-around;
+}
+
+.aboutMovie{
+    font-size: 16px;
+    color: white;
+    padding: 0 2px;
+    padding-bottom: 3px;
+}
+
