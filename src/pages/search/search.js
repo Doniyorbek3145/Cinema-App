@@ -8,18 +8,22 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "./search.css";
-import { ApiKey } from "../trending/trending";
 import SingleContent from "../../component/singleContent/singleContent";
 import CustomPagination from "../../component/CustomPagination/CustomPagination";
+import { useDispatch, useSelector } from "react-redux";
+import { getSearchCinemaData } from "../../redux/actions/entertainmentActions";
 
 const Search = () => {
-    const [type, setType] = useState(0);
-    const [searchText, setSearchText] = useState("");
-    const [page, setPage] = useState(1);
-    const [content, setContent] = useState([]);
-    const [numOfPages, setNumOfPages] = useState();
+    const [isResult, setIsResult] = useState(false);
+
+    const dispatch = useDispatch();
+
+    const { search_cinema_data, searchCinemaNumberOfPage, search_text, current_type, current_page } = useSelector(state => state.entertainment);
+
+    const [type, setType] = useState(current_type);
+    const [searchText, setSearchText] = useState(search_text);
+    const [page, setPage] = useState(current_page);
 
     const darkTheme = createTheme({
         palette: {
@@ -30,7 +34,7 @@ const Search = () => {
         },
     });
 
-    const fetchSearch = async () => {
+    /*const fetchSearch = async () => {
         try {
             const { data } = await axios.get(
                 `https://api.themoviedb.org/3/search/${type ? "tv" : "movie"}?api_key=${ApiKey
@@ -42,12 +46,22 @@ const Search = () => {
         } catch (error) {
             console.error(error);
         }
+    };*/
+
+    const getSearchData = () => {
+        if (searchText !== "") {
+            dispatch(getSearchCinemaData(type, searchText, page));
+            setIsResult(true);
+        } else {
+            alert("Fill in the search field !!!")
+        }
     };
 
     useEffect(() => {
-        window.scroll(0, 0);
-        fetchSearch();
-        // eslint-disable-next-line
+        if (searchText !== "") {
+            dispatch(getSearchCinemaData(type, searchText, page));
+            setIsResult(true);
+        }
     }, [type, page]);
 
     return (
@@ -62,9 +76,9 @@ const Search = () => {
                         onChange={(e) => setSearchText(e.target.value)}
                     />
                     <Button
-                        onClick={fetchSearch}
                         variant="contained"
                         style={{ marginLeft: 10 }}
+                        onClick={()=>getSearchData()}
                     >
                         <SearchIcon fontSize="large" />
                     </Button>
@@ -85,8 +99,8 @@ const Search = () => {
                 </Tabs>
             </ThemeProvider>
             <div className="trending">
-                {content &&
-                    content.map((c) => (
+                {search_cinema_data &&
+                    search_cinema_data.map((c) => (
                         <SingleContent
                             key={c.id}
                             id={c.id}
@@ -98,11 +112,11 @@ const Search = () => {
                         />
                     ))}
                 {searchText &&
-                    !content &&
+                    !search_cinema_data &&
                     (type ? <h2>No Series Found</h2> : <h2>No Movies Found</h2>)}
             </div>
-            {numOfPages > 1 && (
-                <CustomPagination setPage={setPage} numOfPages={numOfPages} />
+            {searchCinemaNumberOfPage > 1 && (
+                <CustomPagination page={page} setPage={setPage} numOfPages={searchCinemaNumberOfPage} />
             )}
         </div>
     );

@@ -3,11 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import {
-    img_500,
-    unavailable,
-    unavailableLandscape,
-} from "../../config/config";
+import {img_500, unavailable, unavailableLandscape} from "../../config/config";
 import "./contentModal.scss";
 import { Button } from "@material-ui/core";
 import Carousel from "../Carousel/Carousel";
@@ -15,6 +11,8 @@ import { YouTube } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleCinema, getSingleCinemaCredits, getSingleCinemaVideo } from "../../redux/actions/entertainmentActions";
+
+
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: "flex",
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ContentModal({ children}) {
+export default function ContentModal({ children }) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     // const [content, setContent] = useState();
@@ -107,20 +105,12 @@ export default function ContentModal({ children}) {
                         <div className={classes.paper}>
                             <div className="ContentModal">
                                 <img
-                                    src={
-                                        singleCinema.poster_path
-                                            ? `${img_500}/${singleCinema.poster_path}`
-                                            : unavailable
-                                    }
+                                    src={singleCinema.poster_path ? `${img_500}/${singleCinema.poster_path}` : unavailable}
                                     alt={singleCinema.name || singleCinema.title}
                                     className="ContentModal__portrait"
                                 />
                                 <img
-                                    src={
-                                        singleCinema.backdrop_path
-                                            ? `${img_500}/${singleCinema.backdrop_path}`
-                                            : unavailableLandscape
-                                    }
+                                    src={singleCinema.backdrop_path ? `${img_500}/${singleCinema.backdrop_path}` : unavailableLandscape}
                                     alt={singleCinema.name || singleCinema.title}
                                     className="ContentModal__landscape"
                                 />

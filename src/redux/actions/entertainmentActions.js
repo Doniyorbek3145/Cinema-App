@@ -6,18 +6,14 @@ import {
     LOADING_FALSE,
     LOADING_TRUE, SET_MOVIES_SELECTED_GENRES, SET_SEARCH_TEXT, SET_SERIES_SELECTED_GENRES
 } from "../actionTypes/actionTypes";
-// import {APIKey} from "../../APIKey";
 import { ApiKey as APIKey}  from "../../pages/trending/trending";
-// import {PATH_NAME} from "../../tools/constant";
 import axios from "axios";
 export const PATH_NAME = "https://api.themoviedb.org/3";
 
 
 export const getTrending = (page) => async (dispatch) => {
 
-    dispatch({
-        type: LOADING_TRUE
-    });
+    
 
     try {
 
@@ -38,9 +34,7 @@ export const getTrending = (page) => async (dispatch) => {
 
 export const getSingleCinema = (cinema_type, cinema_id) => async (dispatch) => {
 
-    dispatch({
-        type: LOADING_TRUE
-    });
+    
 
     try {
 

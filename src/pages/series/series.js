@@ -1,48 +1,45 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CustomPagination from "../../component/CustomPagination/CustomPagination";
 import Genres from "../../component/genres/genres";
 import SingleContent from "../../component/singleContent/singleContent";
-import useGenre from "../../hooks/useGenre";
-import { ApiKey } from "../trending/trending";
+import useGenres from "../../hooks/useGenre";
+import { getSeries } from "../../redux/actions/entertainmentActions";
 
 const Series = () => {
-  const [genres, setGenres] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
   const [page, setPage] = useState(1);
+
+  /*const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [content, setContent] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
-  const genreforURL = useGenre(selectedGenres);
+  const genreforURL = useGenre(selectedGenres);*/
+  /*const fetchSeries = async () => {
+      const { data } = await axios.get(
+        `https://api.themoviedb.org/3/discover/tv?api_key=${ApiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}`
+      );
+      setContent(data.results);
+      setNumOfPages(data.total_pages);
+      // console.log(data);
+    };*/
 
-  const fetchSeries = async () => {
-    const { data } = await axios.get(
-      `https://api.themoviedb.org/3/discover/tv?api_key=${ApiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}`
-    );
-    setContent(data.results);
-    setNumOfPages(data.total_pages);
-    // console.log(data);
-  };
+  const dispatch = useDispatch();
 
+  const { series, seriesNumberOfPages, loading, series_selected_genres } = useSelector(state => state.entertainment);
   useEffect(() => {
-    window.scroll(0, 0);
-    fetchSeries();
-    // eslint-disable-next-line
-  }, [genreforURL, page]);
+    dispatch(getSeries(page, series_selected_genres));
+  }, [page, series_selected_genres]);
 
   return (
     <div>
       <span className="pageTitle">Discover Series</span>
       <Genres
         type="tv"
-        selectedGenres={selectedGenres}
-        setSelectedGenres={setSelectedGenres}
-        genres={genres}
-        setGenres={setGenres}
         setPage={setPage}
       />
       <div className="trending">
-        {content &&
-          content.map((c) => (
+        {series &&
+          series.map((c) => (
             <SingleContent
               key={c.id}
               id={c.id}
@@ -54,8 +51,8 @@ const Series = () => {
             />
           ))}
       </div>
-      {numOfPages > 1 && (
-        <CustomPagination setPage={setPage} numOfPages={numOfPages} />
+      {seriesNumberOfPages > 1 && (
+        <CustomPagination setPage={setPage} numOfPages={seriesNumberOfPages} />
       )}
     </div>
   );
