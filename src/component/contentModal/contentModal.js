@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import axios from "axios";
 import {
     img_500,
     unavailable,
@@ -12,9 +11,10 @@ import {
 import "./contentModal.scss";
 import { Button } from "@material-ui/core";
 import Carousel from "../Carousel/Carousel";
-import { ApiKey } from "../../pages/trending/trending";
 import { YouTube } from "@material-ui/icons";
-
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getSingleCinema, getSingleCinemaCredits, getSingleCinemaVideo } from "../../redux/actions/entertainmentActions";
 const useStyles = makeStyles((theme) => ({
     modal: {
         display: "flex",
@@ -33,11 +33,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ContentModal({ children, media_type, id }) {
+
+export default function ContentModal({ children}) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const [content, setContent] = useState();
-    const [video, setVideo] = useState();
+    // const [content, setContent] = useState();
+    // const [video, setVideo] = useState();
+
+    const { type, id } = useParams();
+    const dispatch = useDispatch();
+    const { singleCinema, singleCinemaVideo, singleCinemaCredits } = useSelector(state => state.entertainment)
 
     const handleOpen = () => {
         setOpen(true);
@@ -47,7 +52,7 @@ export default function ContentModal({ children, media_type, id }) {
         setOpen(false);
     };
 
-    const fetchData = async () => {
+    /*const fetchData = async () => {
         const { data } = await axios.get(
             `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${ApiKey}&language=en-US`
         );
@@ -67,7 +72,13 @@ export default function ContentModal({ children, media_type, id }) {
         fetchData();
         fetchVideo();
         // eslint-disable-next-line
-    }, []);
+    }, []);*/
+
+    useEffect(() => {
+        dispatch(getSingleCinema(type, id));
+        dispatch(getSingleCinemaVideo(type, id));
+        dispatch(getSingleCinemaCredits(type, id));
+    }, [type, id]);
 
     return (
         <>
@@ -92,47 +103,57 @@ export default function ContentModal({ children, media_type, id }) {
                 }}
             >
                 <Fade in={open}>
-                    {content && (
+                    {singleCinema && (
                         <div className={classes.paper}>
                             <div className="ContentModal">
                                 <img
                                     src={
-                                        content.poster_path
-                                            ? `${img_500}/${content.poster_path}`
+                                        singleCinema.poster_path
+                                            ? `${img_500}/${singleCinema.poster_path}`
                                             : unavailable
                                     }
-                                    alt={content.name || content.title}
+                                    alt={singleCinema.name || singleCinema.title}
                                     className="ContentModal__portrait"
                                 />
                                 <img
                                     src={
-                                        content.backdrop_path
-                                            ? `${img_500}/${content.backdrop_path}`
+                                        singleCinema.backdrop_path
+                                            ? `${img_500}/${singleCinema.backdrop_path}`
                                             : unavailableLandscape
                                     }
-                                    alt={content.name || content.title}
+                                    alt={singleCinema.name || singleCinema.title}
                                     className="ContentModal__landscape"
                                 />
                                 <div className="ContentModal__about">
                                     <span className="ContentModal__title">
-                                        {content.name || content.title} (
-                                        {(
-                                            content.first_air_date ||
-                                            content.release_date ||
-                                            "-----"
-                                        ).substring(0, 4)}
+                                        {singleCinema.name || singleCinema.title}(
+                                        {
+                                            (
+                                                singleCinema.first_air_date || singleCinema.release_date || "......"
+                                            ).substring(0, 4)
+                                        }
                                         )
                                     </span>
-                                    {content.tagline && (
+                                    {/*content.tagline && (
                                         <i className="tagline">{content.tagline}</i>
-                                    )}
+                                    )*/}
+                                    {
+                                        singleCinema.tagline && (
+                                            <i className="tagline">{singleCinema.tagline}</i>
+                                        )
+                                    }
 
                                     <span className="ContentModal__description">
-                                        {content.overview}
+                                        {singleCinema.overview ? singleCinema.overview : 'No description'}
                                     </span>
 
                                     <div>
-                                        <Carousel id={id}  media_type={media_type} />
+                                        {
+                                            singleCinemaCredits.length > 1 ?
+                                                <div>
+                                                    <Carousel />
+                                                </div> : ""
+                                        }
                                     </div>
 
                                     <Button
@@ -140,7 +161,7 @@ export default function ContentModal({ children, media_type, id }) {
                                         startIcon={<YouTube />}
                                         color="secondary"
                                         target="__blank"
-                                        href={`https://www.youtube.com/watch?v=${video}`}
+                                        href={`https://www.youtube.com/watch?v=${singleCinemaVideo}`}
                                     >
                                         Watch the Trailer
                                     </Button>

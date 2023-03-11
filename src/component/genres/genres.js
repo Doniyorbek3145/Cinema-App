@@ -1,16 +1,23 @@
 import { Chip } from "@material-ui/core";
-import axios from "axios";
-import { useEffect } from "react";
-import { ApiKey } from "../../pages/trending/trending";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { setMoviesSelectedGenresData, setSeriesSelectedGenresData } from "../../redux/actions/entertainmentActions";
+import useGenres from "../../hooks/useGenre";
 
-const Genres = ({
-    selectedGenres,
-    setSelectedGenres,
-    genres,
-    setGenres,
-    type,
-    setPage,
-}) => {
+
+const Genres = ({ setPage, type }) => {
+
+    const dispatch = useDispatch();
+
+    const { movies_genres_data } = useSelector(state => state.entertainment);
+
+    const [selectedGenres, setSelectedGenres] = useState([]);
+
+    const [genres, setGenres] = useState(movies_genres_data);
+
+    const genreForUrl = useGenres(selectedGenres);
+
+
     const handleAdd = (genre) => {
         setSelectedGenres([...selectedGenres, genre]);
         setGenres(genres.filter((g) => g.id !== genre.id));
@@ -25,7 +32,7 @@ const Genres = ({
         setPage(1);
     };
 
-    const fetchGenres = async () => {
+    /*const fetchGenres = async () => {
         const { data } = await axios.get(
             `https://api.themoviedb.org/3/genre/${type}/list?api_key=${ApiKey}&language=en-US`
         );
@@ -39,7 +46,16 @@ const Genres = ({
             setGenres({}); // unmounting
         };
         // eslint-disable-next-line
-    }, []);
+    }, []);*/
+
+    useEffect(() => {
+        if (type === "movie") {
+            dispatch(setMoviesSelectedGenresData(genreForUrl));
+        }
+        else {
+            dispatch(setSeriesSelectedGenresData(genreForUrl));
+        }
+    }, [genreForUrl]);
 
     return (
         <div style={{ padding: "6px 0" }}>
