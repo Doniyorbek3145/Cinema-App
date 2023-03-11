@@ -4,7 +4,7 @@ import CustomPagination from "../../component/CustomPagination/CustomPagination"
 import Genres from "../../component/genres/genres";
 import SingleContent from "../../component/singleContent/singleContent";
 import useGenres from "../../hooks/useGenre";
-import { getSeries } from "../../redux/actions/entertainmentActions";
+import { getSeries } from "../../redux/actions/Actions";
 
 const Series = () => {
   const [page, setPage] = useState(1);

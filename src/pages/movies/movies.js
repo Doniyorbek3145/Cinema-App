@@ -3,7 +3,7 @@ import CustomPagination from "../../component/CustomPagination/CustomPagination"
 import Genres from "../../component/genres/genres";
 import SingleContent from "../../component/singleContent/singleContent";
 import { useSelector, useDispatch } from "react-redux";
-import { getMovies } from "../../redux/actions/entertainmentActions";
+import { getMovies } from "../../redux/actions/Actions";
 
 
 const Movies = () => {

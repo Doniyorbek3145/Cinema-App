@@ -1,7 +1,7 @@
 import { Chip } from "@material-ui/core";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setMoviesSelectedGenresData, setSeriesSelectedGenresData } from "../../redux/actions/entertainmentActions";
+import { setMoviesSelectedGenresData, setSeriesSelectedGenresData } from "../../redux/actions/Actions";
 import useGenres from "../../hooks/useGenre";
 
 

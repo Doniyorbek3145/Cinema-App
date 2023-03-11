@@ -10,7 +10,7 @@ import Carousel from "../Carousel/Carousel";
 import { YouTube } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleCinema, getSingleCinemaCredits, getSingleCinemaVideo } from "../../redux/actions/entertainmentActions";
+import { getSingleCinema, getSingleCinemaCredits, getSingleCinemaVideo } from "../../redux/actions/Actions";
 
 
 const useStyles = makeStyles((theme) => ({

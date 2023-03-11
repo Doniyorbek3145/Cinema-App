@@ -12,7 +12,7 @@ import "./search.css";
 import SingleContent from "../../component/singleContent/singleContent";
 import CustomPagination from "../../component/CustomPagination/CustomPagination";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchCinemaData } from "../../redux/actions/entertainmentActions";
+import { getSearchCinemaData } from "../../redux/actions/Actions";
 
 const Search = () => {
     const [isResult, setIsResult] = useState(false);

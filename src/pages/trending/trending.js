@@ -3,7 +3,7 @@ import SingleContent from "../../component/singleContent/singleContent";
 import "./Trending.scss";
 import CustomPagination from "../../component/CustomPagination/CustomPagination";
 import { useDispatch, useSelector } from "react-redux";
-import { getTrending } from "../../redux/actions/entertainmentActions";
+import { getTrending } from "../../redux/actions/Actions";
 
 export const ApiKey = `1fd40a54bb7c8b5e91b107f78cdaac79`;
 
